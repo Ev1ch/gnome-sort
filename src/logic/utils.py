@@ -37,7 +37,7 @@ def is_smaller_or_equal(a: T, b: T) -> bool:
     return a <= b
 
 
-def get_random_collection(length: int, minimum = 0, maximum=100, are_floats=False):
+def get_random_collection(length: int, minimum=0, maximum=100, are_floats=False):
     if length <= 0:
         raise IllegalArgumentError("Length must be positive")
 
@@ -55,13 +55,13 @@ def get_merged_list_by(step: int):
     if step <= 0:
         raise IllegalArgumentError("Step must be positive")
 
-    def merge(l: List[List[T]]):
+    def merge(lst: List[List[T]]):
         merged_list: List[T] = []
-        common_length = min([len(current_list) for current_list in l])
+        common_length = min([len(current_list) for current_list in lst])
 
         for i in range(0, common_length, step):
-            for current_list in l:
-                merged_list += current_list[i:i + step]
+            for current_list in lst:
+                merged_list += current_list[i:i+step]
 
         return merged_list
 
