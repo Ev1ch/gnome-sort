@@ -1,25 +1,18 @@
 from typing import List, Tuple
 
-from logic.domain import Algorithm, MultithreadedAlgorithm, Flatter
+from logic.domain import Algorithm, MultithreadedAlgorithm
 from logic.algorithms import sort, sort_multithreaded
 
 
-AlgorithmVariant = Tuple[str, Algorithm | MultithreadedAlgorithm]
-FlatterVariant = Tuple[str, Flatter]
-
-
-SIMPLE_ALGORITHMS: List[AlgorithmVariant] = [
+SIMPLE_ALGORITHMS: List[Tuple[str, Algorithm]] = [
     ("sort", sort),
 ]
 
-MULTITHREADED_ALGORITHMS: List[AlgorithmVariant] = [
+MULTITHREADED_ALGORITHMS: List[Tuple[str, MultithreadedAlgorithm]] = [
     ("sort_multithreaded", sort_multithreaded),
 ]
 
-ALL_ALGORITHMS: List[AlgorithmVariant] = [
-    ("sort", sort),
-    ("sort_multithreaded", sort_multithreaded),
-]
+ALL_ALGORITHMS = SIMPLE_ALGORITHMS + MULTITHREADED_ALGORITHMS
 
 DATA_ROOT_PATH = "D:\\University\\Parralel programming\\Course\\src\\data"
 
