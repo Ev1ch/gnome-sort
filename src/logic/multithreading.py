@@ -1,5 +1,5 @@
-from os import cpu_count
 from math import ceil
+from os import cpu_count
 
 from .domain import IllegalArgumentError
 
