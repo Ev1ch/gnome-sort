@@ -6,25 +6,21 @@ from .utils import is_bigger_or_equal, is_smaller_or_equal, get_chunks, flatten,
 from .multithreading import get_chunk_size
 
 
-def algorithm(initial_collection: List[Item], comparer: Comparer[Item]):
-    index = 0
-    collection = initial_collection.copy()
-    collection_length = len(collection)
-
-    while index < collection_length:
-        if index == 0 or comparer(collection[index], collection[index - 1]):
-            index = index + 1
-        else:
-            collection[index], collection[index -
-                                          1] = collection[index-1], collection[index]
-            index = index - 1
-
-    return collection
-
-
 def gnome_sort(comparer: Comparer[Item]):
-    def sorter(collection: List[Item]):
-        return algorithm(collection, comparer)
+    def sorter(initial_collection: List[Item]):
+        index = 0
+        collection = initial_collection.copy()
+        collection_length = len(collection)
+
+        while index < collection_length:
+            if index == 0 or comparer(collection[index], collection[index - 1]):
+                index = index + 1
+            else:
+                collection[index], collection[index -
+                                              1] = collection[index-1], collection[index]
+                index = index - 1
+
+        return collection
 
     return sorter
 
@@ -46,11 +42,11 @@ def gnome_sort_multithreaded(comparer: Comparer[Item], flatter: Flatter[Item]):
         executor = ThreadPoolExecutor(chunks_number)
         sorted_chunks = [
             sorted_chunk for sorted_chunk in executor.map(
-                algorithm, chunks, [comparer] * chunks_number
+                gnome_sort(comparer), chunks
             )
         ]
 
-        return algorithm(flatter(sorted_chunks), comparer)
+        return gnome_sort(comparer)(flatter(sorted_chunks))
 
     return sorter
 
