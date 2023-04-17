@@ -2,14 +2,17 @@ from timeit import default_timer as timer
 from datetime import timedelta
 from tabulate import tabulate
 
-from logic.utils import get_random_collection, get_lists_from_dictionary, get_average, flatten
-from logic.multithreading import get_optimal_threads_number
-from constants import ALL_ALGORITHMS, MULTITHREADED_ALGORITHMS
+from files.utils import get_list_from_file
+from logic.utils import get_lists_from_dictionary
+from constants import ALL_ALGORITHMS, MULTITHREADED_ALGORITHMS, DATA
 
 
-COLLECTION_SIZES = [5_000, 10_000, 20_000]
-THREADS_NUMBERS = [get_optimal_threads_number(), 10, 20]
-TIMES_TO_RUN = 3
+COLLECTION_SIZES = [
+    1_000, 2_000, 3_000, 5_000, 8_000, 10_000
+]
+THREADS_NUMBERS = []
+TIMES_TO_RUN = 2
+OUTPUT_FILE_PATH = "G:\\My Drive\\Course\\Результати.txt"
 
 
 def get_time_delta(start: float, end: float):
@@ -18,6 +21,10 @@ def get_time_delta(start: float, end: float):
 
 def get_formatted_time_delta(start: float, end: float):
     return f"{get_time_delta(start, end):,}ms"
+
+
+def get_list_by_size(collection_size: int):
+    return get_list_from_file(DATA[collection_size])
 
 
 def format_row(row):
@@ -34,14 +41,14 @@ def format_table(table):
 if __name__ == "__main__":
     table = [
         ["Algorithm"] +
-        flatten([[collection_size] * TIMES_TO_RUN for collection_size in COLLECTION_SIZES]) +
+        [collection_size for collection_size in COLLECTION_SIZES] * TIMES_TO_RUN +
         ["Average"]
     ]
     results = dict()
 
-    for size in COLLECTION_SIZES:
-        for _ in range(TIMES_TO_RUN):
-            collection = get_random_collection(size, 0, size)
+    for _ in range(TIMES_TO_RUN):
+        for size in COLLECTION_SIZES:
+            collection = get_list_by_size(size)
 
             for algorithm_name, algorithm in ALL_ALGORITHMS:
                 is_multithreaded = algorithm_name in [
@@ -49,18 +56,32 @@ if __name__ == "__main__":
                 ]
 
                 if is_multithreaded:
-                    for threads_number in THREADS_NUMBERS:
-                        start = timer()
-                        algorithm(collection, threads_number)
-                        end = timer()
-                        result_algorithm_name = f"{algorithm_name}_{threads_number}"
+                    if len(THREADS_NUMBERS) > 0:
+                        for threads_number in THREADS_NUMBERS:
+                            start = timer()
+                            algorithm(collection, threads_number)
+                            end = timer()
+                            result_algorithm_name = f"{algorithm_name}_{threads_number}"
 
-                        if result_algorithm_name in results:
-                            results[result_algorithm_name].append(
+                            if result_algorithm_name in results:
+                                results[result_algorithm_name].append(
+                                    get_time_delta(start, end)
+                                )
+                            else:
+                                results[result_algorithm_name] = [
+                                    get_time_delta(start, end)
+                                ]
+                    else:
+                        start = timer()
+                        algorithm(collection)
+                        end = timer()
+
+                        if algorithm_name in results:
+                            results[algorithm_name].append(
                                 get_time_delta(start, end)
                             )
                         else:
-                            results[result_algorithm_name] = [
+                            results[algorithm_name] = [
                                 get_time_delta(start, end)
                             ]
                 else:
@@ -75,11 +96,13 @@ if __name__ == "__main__":
                         results[algorithm_name] = [
                             get_time_delta(start, end)]
 
-    results_lists = [
-        [*lst, round(get_average(lst[1:]))]
-        for lst in get_lists_from_dictionary(results)
-    ]
+    results_lists = get_lists_from_dictionary(results)
     table += results_lists
     format_table(table)
+    tabulated_table = tabulate(table, headers="firstrow")
 
-    print(tabulate(table, headers="firstrow", ))
+    results_file = open(OUTPUT_FILE_PATH, "w")
+    results_file.write(tabulated_table)
+    results_file.close()
+
+    print(tabulated_table)
