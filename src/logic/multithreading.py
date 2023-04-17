@@ -4,7 +4,7 @@ from math import ceil
 from .domain import IllegalArgumentError
 
 
-def get_maximum_chunks_number(collection_length: int, minimum_chunk_size: int):
+def get_maximum_chunks_number(collection_length: int, minimum_chunk_size: int) -> int:
     if collection_length < 0:
         raise IllegalArgumentError("Collection length mustn't be negative")
 
