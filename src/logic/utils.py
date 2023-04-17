@@ -33,7 +33,7 @@ def is_smaller_or_equal(a: T, b: T) -> bool:
     return a <= b
 
 
-def get_random_collection(length: int, minimum=0, maximum=100, are_floats=False):
+def get_random_collection(length: int, minimum: int, maximum: int, are_floats=False):
     if length <= 0:
         raise IllegalArgumentError("Length must be positive")
 
