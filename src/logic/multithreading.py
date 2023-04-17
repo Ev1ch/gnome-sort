@@ -27,7 +27,7 @@ def get_chunk_size(collection_length: int, threads_number: int, minimum_chunk_si
     maximum_chunks_number = get_maximum_chunks_number(collection_length, minimum_chunk_size)
 
     if threads_number > maximum_chunks_number:
-        return maximum_chunks_number
+        return minimum_chunk_size
 
     return ceil(collection_length / threads_number)
 
