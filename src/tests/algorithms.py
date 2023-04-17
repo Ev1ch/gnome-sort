@@ -18,11 +18,13 @@ class BaseAlgorithmTest:
         self.minimum_collection_size = 10
         self.maximum_collection_size = 1_000
 
-    def run_algorithm(self, collection):
-        return self.algorithm(collection, **self.algorithm_args)
+    def run_algorithm(self, collection, additional_args={}):
+        params = { 'collection': collection } | self.algorithm_args | additional_args
+        return self.algorithm(**params)
 
     def run_control_algorithm(self, collection, additional_args={}):
-        return self.control_algorithm(collection, **self.control_algorithm_args, **additional_args)
+        params = self.control_algorithm_args | additional_args
+        return self.control_algorithm(collection, **params)
 
     def test_empty_list(self):
         self.assertEqual(self.run_algorithm([]), [])
@@ -69,7 +71,6 @@ class SortAlgorithmTest(BaseAlgorithmTest):
     def set_up(self):
         super().set_up()
         self.algorithm = sort
-        self.algorithm_args = {}
 
 
 class SortAscendingAlgorithmTest(unittest.TestCase, SortAlgorithmTest):
@@ -88,13 +89,11 @@ class SortMultithreadAlgorithmTest(BaseAlgorithmTest):
     def set_up(self):
         super().set_up()
         self.algorithm = sort_multithreaded
-        self.algorithm_args = { "threads_number": get_optimal_threads_number() }
 
     def test_threads_number_below_zero(self):
-        self.algorithm_args['threads_number'] = -1
         collection = get_random_collection(self.minimum_collection_size)
         with self.assertRaises(IllegalArgumentError):
-            self.run_algorithm(collection)
+            self.run_algorithm(collection, { 'threads_number': -1 })
 
 
 class SortAscendingMultithreadedAlgorithmTest(unittest.TestCase, SortMultithreadAlgorithmTest):
