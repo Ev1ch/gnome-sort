@@ -84,8 +84,8 @@ class SortDescendingAlgorithmTest(unittest.TestCase, SortAlgorithmTest):
         self.control_algorithm_args['reverse'] = True
 
 
-class MultithreadAlgorithmTest(unittest.TestCase, BaseAlgorithmTest):
-    def setUp(self):
+class SortMultithreadAlgorithmTest(BaseAlgorithmTest):
+    def set_up(self):
         super().set_up()
         self.algorithm = sort_multithreaded
         self.algorithm_args = { "threads_number": get_optimal_threads_number() }
@@ -95,6 +95,18 @@ class MultithreadAlgorithmTest(unittest.TestCase, BaseAlgorithmTest):
         collection = get_random_collection(self.minimum_collection_size)
         with self.assertRaises(IllegalArgumentError):
             self.run_algorithm(collection)
+
+
+class SortAscendingMultithreadedAlgorithmTest(unittest.TestCase, SortMultithreadAlgorithmTest):
+    def setUp(self):
+        super().set_up()
+
+
+class SortDescendingMultithreadedAlgorithmTest(unittest.TestCase, SortMultithreadAlgorithmTest):
+    def setUp(self):
+        super().set_up()
+        self.algorithm_args['is_reversed'] = True
+        self.control_algorithm_args['reverse'] = True
 
 
 if __name__ == '__main__':
