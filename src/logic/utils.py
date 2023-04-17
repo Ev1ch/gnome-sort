@@ -9,16 +9,12 @@ K = TypeVar("K")
 L = TypeVar("L", int, float)
 
 
-def get_chunks(collection: List[T], chunk_size: int):
+def get_chunks_indexes_pairs(collection: List[T], chunk_size: int):
     if chunk_size <= 0:
         raise IllegalArgumentError("Chunk size must be positive")
 
-    return [collection[i:i+chunk_size]
+    return [(i, i + chunk_size - 1)
             for i in range(0, len(collection), chunk_size)]
-
-
-def flatten(lst: List[List[T]]):
-    return [item for sublist in lst for item in sublist]
 
 
 def is_bigger(a: T, b: T) -> bool:
