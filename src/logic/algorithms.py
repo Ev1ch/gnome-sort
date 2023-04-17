@@ -64,35 +64,18 @@ def sort(collection: List[Item], is_reversed=False):
     return sort_ascending(collection)
 
 
-sort_ascending_multithreaded_flatten: MultithreadedAlgorithm = gnome_sort_multithreaded(
+sort_ascending_multithreaded: MultithreadedAlgorithm = gnome_sort_multithreaded(
     is_bigger_or_equal, flatten
 )
 
 
-sort_descending_multithreaded_flatten: MultithreadedAlgorithm = gnome_sort_multithreaded(
+sort_descending_multithreaded: MultithreadedAlgorithm = gnome_sort_multithreaded(
     is_smaller_or_equal, flatten
 )
 
 
-def sort_multithreaded_flatten(collection: List[Item], threads_number: int, is_reversed=False):
+def sort_multithreaded(collection: List[Item], threads_number: int, is_reversed=False):
     if is_reversed:
-        return sort_descending_multithreaded_flatten(collection, threads_number)
+        return sort_descending_multithreaded(collection, threads_number)
 
-    return sort_ascending_multithreaded_flatten(collection, threads_number)
-
-
-sort_ascending_multithreaded_by_one: MultithreadedAlgorithm = gnome_sort_multithreaded(
-    is_bigger_or_equal, get_merged_list_by_one
-)
-
-
-sort_descending_multithreaded_by_one: MultithreadedAlgorithm = gnome_sort_multithreaded(
-    is_bigger_or_equal, get_merged_list_by_one
-)
-
-
-def sort_multithreaded_by_one(collection: List[Item], threads_number: int, is_reversed=False):
-    if is_reversed:
-        return sort_descending_multithreaded_by_one(collection, threads_number)
-
-    return sort_ascending_multithreaded_by_one(collection, threads_number)
+    return sort_ascending_multithreaded(collection, threads_number)
