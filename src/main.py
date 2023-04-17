@@ -41,8 +41,7 @@ def format_table(table):
 if __name__ == "__main__":
     table = [
         ["Algorithm"] +
-        [collection_size for collection_size in COLLECTION_SIZES] * TIMES_TO_RUN +
-        ["Average"]
+        [collection_size for collection_size in COLLECTION_SIZES] * TIMES_TO_RUN
     ]
     results = dict()
 
