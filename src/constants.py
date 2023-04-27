@@ -23,4 +23,9 @@ DATA = {
     5_000: DATA_ROOT_PATH + "\\5000.csv",
     8_000: DATA_ROOT_PATH + "\\8000.csv",
     10_000: DATA_ROOT_PATH + "\\10000.csv",
+    20_000: DATA_ROOT_PATH + "\\20000.csv",
+    30_000: DATA_ROOT_PATH + "\\30000.csv",
+    50_000: DATA_ROOT_PATH + "\\50000.csv",
+    80_000: DATA_ROOT_PATH + "\\80000.csv",
+    100_000: DATA_ROOT_PATH + "\\100000.csv",
 }
