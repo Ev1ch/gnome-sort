@@ -1,7 +1,8 @@
 import unittest
 
 from sys import path
-path.append('D:\\University\\Parralel programming\\Course\\src')
+
+path.append("D:\\University\\Parralel programming\\Course\\src")
 
 from logic.algorithms import sort, sort_multithreaded
 from logic.multithreading import get_optimal_threads_number
@@ -16,10 +17,10 @@ class BaseAlgorithmTest:
         self.control_algorithm = sorted
         self.control_algorithm_args = {}
         self.minimum_collection_size = 10
-        self.maximum_collection_size = 1_000
+        self.maximum_collection_size = 20_000
 
     def run_algorithm(self, collection, additional_args={}):
-        params = { 'collection': collection } | self.algorithm_args | additional_args
+        params = {"collection": collection} | self.algorithm_args | additional_args
         return self.algorithm(**params)
 
     def run_control_algorithm(self, collection, additional_args={}):
@@ -33,38 +34,59 @@ class BaseAlgorithmTest:
         self.assertEqual(self.run_algorithm([1]), [1])
 
     def test_regular_list(self):
-        collection = get_random_collection(self.minimum_collection_size)
-        self.assertEqual(self.run_algorithm(collection), self.run_control_algorithm(collection))
+        collection = get_random_collection(
+            self.minimum_collection_size, 0, self.minimum_collection_size
+        )
+        self.assertEqual(
+            self.run_algorithm(collection), self.run_control_algorithm(collection)
+        )
 
     def test_big_list(self):
         collection = get_random_collection(
             self.maximum_collection_size, 0, self.maximum_collection_size
         )
-        self.assertEqual(self.run_algorithm(collection), self.run_control_algorithm(collection))
+        self.assertEqual(
+            self.run_algorithm(collection), self.run_control_algorithm(collection)
+        )
 
     def test_sorted_list(self):
         sorted_collection = self.run_control_algorithm(
-            get_random_collection(self.minimum_collection_size))
+            get_random_collection(
+                self.minimum_collection_size, 0, self.minimum_collection_size
+            )
+        )
         self.assertEqual(
-            self.run_algorithm(sorted_collection), self.run_control_algorithm(sorted_collection)
+            self.run_algorithm(sorted_collection),
+            self.run_control_algorithm(sorted_collection),
         )
 
     def test_list_with_duplicates(self):
-        collection = get_random_collection(self.minimum_collection_size)
+        collection = get_random_collection(
+            self.minimum_collection_size, 0, self.minimum_collection_size
+        )
         collection += collection
-        self.assertEqual(self.run_algorithm(collection), self.run_control_algorithm(collection))
+        self.assertEqual(
+            self.run_algorithm(collection), self.run_control_algorithm(collection)
+        )
 
     def test_list_with_negative_numbers(self):
         collection = get_random_collection(
             self.minimum_collection_size, -self.minimum_collection_size, 0
         )
-        self.assertEqual(self.run_algorithm(collection), self.run_control_algorithm(collection))
+        self.assertEqual(
+            self.run_algorithm(collection), self.run_control_algorithm(collection)
+        )
 
     def test_list_with_float_numbers(self):
         collection = get_random_collection(
-            self.minimum_collection_size, are_floats=True
+            self.minimum_collection_size,
+            0,
+            self.minimum_collection_size,
+            are_floats=True,
         )
-        self.assertEqual(self.run_algorithm(collection), self.run_control_algorithm(collection))
+        self.assertEqual(
+            self.run_algorithm(collection), self.run_control_algorithm(collection)
+        )
 
 
 class SortAlgorithmTest(BaseAlgorithmTest):
@@ -81,8 +103,8 @@ class SortAscendingAlgorithmTest(unittest.TestCase, SortAlgorithmTest):
 class SortDescendingAlgorithmTest(unittest.TestCase, SortAlgorithmTest):
     def setUp(self):
         super().set_up()
-        self.algorithm_args['is_reversed'] = True
-        self.control_algorithm_args['reverse'] = True
+        self.algorithm_args["is_reversed"] = True
+        self.control_algorithm_args["reverse"] = True
 
 
 class SortMultithreadAlgorithmTest(BaseAlgorithmTest):
@@ -91,22 +113,28 @@ class SortMultithreadAlgorithmTest(BaseAlgorithmTest):
         self.algorithm = sort_multithreaded
 
     def test_threads_number_below_zero(self):
-        collection = get_random_collection(self.minimum_collection_size)
+        collection = get_random_collection(
+            self.minimum_collection_size, 0, self.minimum_collection_size
+        )
         with self.assertRaises(IllegalArgumentError):
-            self.run_algorithm(collection, { 'threads_number': -1 })
+            self.run_algorithm(collection, {"threads_number": -1})
 
 
-class SortAscendingMultithreadedAlgorithmTest(unittest.TestCase, SortMultithreadAlgorithmTest):
+class SortAscendingMultithreadedAlgorithmTest(
+    unittest.TestCase, SortMultithreadAlgorithmTest
+):
     def setUp(self):
         super().set_up()
 
 
-class SortDescendingMultithreadedAlgorithmTest(unittest.TestCase, SortMultithreadAlgorithmTest):
+class SortDescendingMultithreadedAlgorithmTest(
+    unittest.TestCase, SortMultithreadAlgorithmTest
+):
     def setUp(self):
         super().set_up()
-        self.algorithm_args['is_reversed'] = True
-        self.control_algorithm_args['reverse'] = True
+        self.algorithm_args["is_reversed"] = True
+        self.control_algorithm_args["reverse"] = True
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
