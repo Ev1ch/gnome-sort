@@ -8,19 +8,17 @@ from constants import ALL_ALGORITHMS, MULTITHREADED_ALGORITHMS, DATA
 
 
 COLLECTION_SIZES = [
-    1_000, 2_000, 3_000, 5_000, 8_000, 10_000
+    20_000,
 ]
-THREADS_NUMBERS = []
-TIMES_TO_RUN = 2
+THREADS_NUMBERS = [
+    16,
+]
+TIMES_TO_RUN = 1
 OUTPUT_FILE_PATH = "G:\\My Drive\\Course\\Результати.txt"
 
 
 def get_time_delta(start: float, end: float):
-    return timedelta(seconds=end - start).microseconds
-
-
-def get_formatted_time_delta(start: float, end: float):
-    return f"{get_time_delta(start, end):,}ms"
+    return timedelta(seconds=end - start)
 
 
 def get_list_by_size(collection_size: int):
