@@ -5,7 +5,6 @@ from sys import path
 path.append("D:\\University\\Parralel programming\\Course\\src")
 
 from logic.algorithms import sort, sort_multithreaded
-from logic.multithreading import get_optimal_threads_number
 from logic.utils import get_random_collection
 from logic.domain import IllegalArgumentError
 
